@@ -11,15 +11,20 @@ const express = require('express');
 //2.- 
 const bodyParser = require('body-parser');
 
+//Definimos un aplicacion express
+const app = express();  
+
 //Importamos el arhivo admin del directorio routes
 const adminRoutes = require('./routes/admin');
 const shopRoutes = require('./routes/shop');
 
-//Definimos un aplicacion express
-const app = express();  
 
-app.use(bodyParser.urlencoded({extended: false}));
-//app.use(express.urlencoded({extended: true})); 
+app.use(bodyParser.urlencoded({extended: false})); // ver opcion app.use(express.urlencoded({extended: true})); 
+
+//Css es un archivo estatico es decir no es manejado por express router
+//por lo cual debemos agregar otro middleware para el manejo de archivos
+//estaticos del directorio public
+app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/admin', adminRoutes);
 app.use(shopRoutes);
@@ -33,7 +38,5 @@ app.use((req, res, next) => {
   
 
 //La aplicacion escucha las conexiones al puerto 3000
-app.listen(3000, () => {
-    console.log('Example app listening on port 3000!');
-});
+app.listen(3000);
 
